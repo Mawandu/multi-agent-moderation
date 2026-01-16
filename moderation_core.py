@@ -192,6 +192,10 @@ class ArbitrationEngine:
             
             decision = result.get("decision", "neutral")
             
+            # High Confidence Block Override (VETO)
+            if decision == "block" and confidence >= 0.8:
+                return "block"
+            
             if decision == "block":
                 block_score += weight * confidence
             elif decision == "allow":
@@ -203,6 +207,7 @@ class ArbitrationEngine:
             max_conf = max(confidences)
             min_conf = min(confidences)
             if max_conf - min_conf > self.human_review_threshold:
+                # If we have a strong BLOCKsignal even amidst conflict, we might lean block, but let's review
                 context.conflicts.append(f"High disagreement: {max_conf:.2f} vs {min_conf:.2f}")
                 return "review"
         
