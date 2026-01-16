@@ -55,7 +55,7 @@ class TextAnalysisAgent(ModerationAgent):
         
         # Hate speech detection prompt
         prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are a hate speech detector for {region}. Respond ONLY with valid JSON: {{'hate_speech': bool, 'severity': float, 'explanation': str}}"),
+            ("system", "You are a hate speech detector for {region}. Respond ONLY with valid JSON using DOUBLE QUOTES for keys and values where appropriate. Format: {{\"hate_speech\": bool, \"severity\": float, \"explanation\": str}}"),
             ("human", "Text: {text}")
         ])
         chain = (
@@ -66,7 +66,12 @@ class TextAnalysisAgent(ModerationAgent):
             # Invoking the chain with specific inputs
             response = chain.invoke({"region": self.jurisdiction, "text": context.text})
             # Parse JSON from content (handling potential markdown wrappers)
-            content = response.content.replace("```json", "").replace("```", "").strip()
+            content = response.content.strip()
+            if "```json" in content:
+                content = content.split("```json")[1].split("```")[0].strip()
+            elif "```" in content:
+                 content = content.split("```")[1].split("```")[0].strip()
+            
             result = json.loads(content)
             
             self.log_evidence(context, result["explanation"], result["severity"])
