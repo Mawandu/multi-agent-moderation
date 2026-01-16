@@ -2,7 +2,7 @@
 
 A decentralized content moderation system powered by multi-agent LLM orchestration using LangChain and Groq. This Streamlit application simulates a committee of specialized AI agents that collaborate to analyze content and reach a consensus decision.
 
-## 🌟 Features
+## Features
 
 *   **Multi-Agent Architecture**:
     *   **Text Analysis Agent**: Detects hate speech and harmful language.
@@ -13,7 +13,7 @@ A decentralized content moderation system powered by multi-agent LLM orchestrati
 *   **Interactive UI**: Built with Streamlit for real-time testing and visualization.
 *   **Monitoring System**: Tracks metrics like false positive rates and hard limit hits.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -44,12 +44,12 @@ A decentralized content moderation system powered by multi-agent LLM orchestrati
 streamlit run app.py
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 *   **Frontend**: Streamlit
 *   **AI/LLM**: LangChain, Groq API (Llama3, Mixtral)
 *   **Language**: Python
 
-## 📝 License
+## License
 
 This project is open-source and available under the [MIT License](LICENSE).
