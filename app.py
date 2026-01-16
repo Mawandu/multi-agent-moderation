@@ -167,7 +167,7 @@ async def run_moderation(text, img_path, region, key, model, visualize=True):
 # Main Interface
 st.markdown("<h1 class='main-header'>🛡️ Multi-Agent Content Guardian</h1>", unsafe_allow_html=True)
 
-tab_single, tab_batch = st.tabs(["🕵️ Single Analysis", "🚀 Batch Analysis"])
+tab_single, tab_batch = st.tabs(["Single Analysis", "Batch Analysis"])
 
 # --- TAB 1: SINGLE ANALYSIS ---
 with tab_single:
@@ -240,7 +240,7 @@ with tab_single:
 
 # --- TAB 2: BATCH ANALYSIS ---
 with tab_batch:
-    st.header("📦 Batch Processor")
+    st.header("Batch Processor")
     st.markdown("Upload a CSV file with at least a **'text'** column. Optional columns: `'image_path'`, `'region'`.")
     
     uploaded_batch = st.file_uploader("Upload CSV", type=["csv"], key="batch_upload")
@@ -252,7 +252,7 @@ with tab_batch:
         if "text" not in df_batch.columns:
             st.error("CSV must contain a 'text' column.")
         else:
-            if st.button("🚀 Process Batch"):
+            if st.button("Process Batch"):
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 
@@ -284,7 +284,7 @@ with tab_batch:
                     
                     progress_bar.progress((index + 1) / total)
                 
-                status_text.text("Batch processing complete! ✅")
+                status_text.text("Batch processing complete!")
                 
                 # Show Results
                 result_df = pd.DataFrame(results)
@@ -294,7 +294,7 @@ with tab_batch:
                 # Download
                 csv_batch = result_df.to_csv(index=False).encode('utf-8')
                 st.download_button(
-                    label="📥 Download Batch Results (CSV)",
+                    label="Download Batch Results (CSV)",
                     data=csv_batch,
                     file_name=f"batch_moderation_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                     mime="text/csv"
