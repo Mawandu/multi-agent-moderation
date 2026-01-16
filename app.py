@@ -1,6 +1,7 @@
 import streamlit as st
 import asyncio
 import os
+import pandas as pd
 from datetime import datetime
 from typing import Dict
 from dotenv import load_dotenv
@@ -69,6 +70,8 @@ st.markdown("""
 # State Management
 if "monitor" not in st.session_state:
     st.session_state.monitor = MonitoringSystem()
+if "history" not in st.session_state:
+    st.session_state.history = []
 
 # Sidebar Configuration
 with st.sidebar:
@@ -166,6 +169,19 @@ async def run_moderation(text, img_path, region, key, model):
         context.final_decision = await arbitrator.resolve(context)
         
         st.session_state.monitor.log_decision(context)
+        
+        # Log to history
+        st.session_state.history.append({
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "post_id": context.post_id,
+            "text": context.text,
+            "region": context.user_region,
+            "final_decision": context.final_decision,
+            "conflicts": ", ".join(context.conflicts) if context.conflicts else "None",
+            "text_agent_score": context.agent_decisions.get("Text Analysis", {}).get("confidence", 0),
+            "image_agent_score": context.agent_decisions.get("Image Recon", {}).get("confidence", 0)
+        })
+        
         status.update(label="Analysis Complete!", state="complete", expanded=False)
         
     return context
@@ -209,3 +225,22 @@ if run_btn:
                             st.markdown("**Evidence Log:**")
                             for log in agent_logs:
                                 st.code(f"{log['evidence']} (Severity: {log['severity']})")
+
+    # History and Export Section
+    st.markdown("---")
+    st.subheader("📊 Session History & Audit Log")
+    
+    if st.session_state.history:
+        df = pd.DataFrame(st.session_state.history)
+        st.dataframe(df, use_container_width=True)
+        
+        csv = df.to_csv(index=False).encode('utf-8')
+        
+        st.download_button(
+            label="📥 Download Audit Log (CSV)",
+            data=csv,
+            file_name=f"moderation_audit_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+            mime="text/csv"
+        )
+    else:
+        st.info("No analyses performed in this session yet.")
