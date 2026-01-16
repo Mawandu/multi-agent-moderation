@@ -73,9 +73,10 @@ if "monitor" not in st.session_state:
 with st.sidebar:
     st.title("Configuration")
     
-    api_key = st.text_input("Groq API Key", value=os.getenv("GROQ_API_KEY", ""), type="password")
+    # api_key = st.text_input("Groq API Key", value=os.getenv("GROQ_API_KEY", ""), type="password") # Removed for security
+    api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        st.warning("Please provide a Groq API Key to proceed.")
+        st.error("⚠️ GROQ_API_KEY missing! Please add it to your .env file.")
         st.stop()
         
     model_name = st.selectbox("LLM Model", ["llama3-8b-8192", "mixtral-8x7b-32768", "gemma-7b-it"])
