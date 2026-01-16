@@ -80,7 +80,7 @@ with st.sidebar:
     # api_key = st.text_input("Groq API Key", value=os.getenv("GROQ_API_KEY", ""), type="password") # Removed for security
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        st.error("⚠️ GROQ_API_KEY missing! Please add it to your .env file.")
+        st.error("GROQ_API_KEY missing! Please add it to your .env file.")
         st.stop()
         
     model_name = st.selectbox("LLM Model", ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"])
@@ -228,7 +228,7 @@ if run_btn:
 
     # History and Export Section
     st.markdown("---")
-    st.subheader("📊 Session History & Audit Log")
+    st.subheader("Session History & Audit Log")
     
     if st.session_state.history:
         df = pd.DataFrame(st.session_state.history)
@@ -237,7 +237,7 @@ if run_btn:
         csv = df.to_csv(index=False).encode('utf-8')
         
         st.download_button(
-            label="📥 Download Audit Log (CSV)",
+            label="Download Audit Log (CSV)",
             data=csv,
             file_name=f"moderation_audit_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
             mime="text/csv"
