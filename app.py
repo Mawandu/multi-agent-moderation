@@ -80,7 +80,7 @@ with st.sidebar:
         st.error("⚠️ GROQ_API_KEY missing! Please add it to your .env file.")
         st.stop()
         
-    model_name = st.selectbox("LLM Model", ["llama3-8b-8192", "mixtral-8x7b-32768", "gemma-7b-it"])
+    model_name = st.selectbox("LLM Model", ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"])
     
     st.markdown("---")
     st.subheader("System Status")
